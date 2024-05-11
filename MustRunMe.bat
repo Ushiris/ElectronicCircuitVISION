@@ -1,0 +1,1 @@
+git update-index --skip-worktree "ECV_main\Assets\ECV\Font\azuki SDF.asset"
