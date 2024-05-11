@@ -4,7 +4,7 @@
 
 ## バグを見つけたら
 
-<del>Twitter</del> [X](https://twitter.com/ushirisu)やらなんやらに投げても良いし、自分で修正してプルリクを投げてもいいし、issueを投げるという手もある。直せたら直します。
+<del>Twitter</del>[X](https://twitter.com/ushirisu)やらなんやらに投げても良いし、自分で修正してプルリクを投げてもいいし、issueを投げるという手もある。直せたら直します。
 
 ## 開発に参加したい方への注意点
 
