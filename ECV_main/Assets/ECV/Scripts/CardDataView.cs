@@ -8,8 +8,10 @@ public class CardDataView : MonoBehaviour
 {
     [SerializeField] TMP_Text id, node, nameText, text, range, reverse, state;
     [SerializeField] GameObject actions;
+    CardData card;
 
-    void SetData(){
-        
+    void ChangeCard(CardData newCard){
+        card = newCard;
+
     }
 }

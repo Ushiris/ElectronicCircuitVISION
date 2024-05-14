@@ -8,4 +8,5 @@ public class CardData
     public OriginCardData origin = new();
     public CardData equipment;
     public string Id { get => origin.Id;}
+    
 }
