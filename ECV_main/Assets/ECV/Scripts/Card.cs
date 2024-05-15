@@ -10,14 +10,13 @@ public class Card : MonoBehaviour
     public CardData Data { get; private set; }
 
     //カードの見え方
-    [SerializeField] GameObject view;
     [SerializeField] TMP_Text Id, Name;
 
-    void Awake(){
-        Data = new CardData();
-    }
+    bool reversed = true;
 
-    public void SetData(CardData data){
-        Data = data;
+    public void Init(string id){
+        Data = new(id);
+        Id.text = Data.CardId;
+        Name.text = Data.origin.Name;
     }
 }

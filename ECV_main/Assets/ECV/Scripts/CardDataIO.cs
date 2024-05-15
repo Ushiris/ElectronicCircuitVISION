@@ -9,7 +9,7 @@ public class RawCardData
 {
     public string prefix = "T";
     public int no = 0;
-    public string type = "Character";
+    public string type = "";
     public string graze = "";
     public string node = "-";
     public string cost = "-";
@@ -31,7 +31,7 @@ public class RawCardData
 
 public enum CardPlayType
 {
-    CharacterCard, SpellCard, CommandCard, Character, None,
+    CharacterCard, SpellCard, CommandCard, None,
 }
 public enum CardEffectRange
 {

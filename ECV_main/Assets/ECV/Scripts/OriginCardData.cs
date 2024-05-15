@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -19,19 +20,23 @@ public class OriginCardData
     public string Text { get; private set;} = "";
     public string User { get; private set;} = "";
     public string Comment { get; private set;} = "";
-    public List<CardRace> Specialist { get; private set; } = new List<CardRace>();
+    public List<CardRace> Solidarity { get; private set; } = new List<CardRace>();
     public string Popularity4 { get; private set; } = "";
     public string Popularity2 { get; private set; } = "";
     public string Popularity1 { get; private set; } = "";
     public string Popularity0 { get; private set; } = "";
 
-    public CardPlayType PlayType{get; private set;} = CardPlayType.None;
+    public CardPlayType PlayType{ get; private set;} = CardPlayType.None;
     public CardEffectDuration Duration = CardEffectDuration.None;
     public CardEffectRange Range = CardEffectRange.None;
     CardRace race1 = CardRace.None;
     CardRace race2 = CardRace.None;
 
-    public void LoadData(int num, string prefix = "T"){
+    public OriginCardData(int num, string prefix = "T"){
+        LoadData(num, prefix);
+    }
+
+    void LoadData(int num, string prefix = "T"){
         var data = CardDataList.Instance.GetCard(prefix + num.ToString());
 
         Name = Regex.Replace(data.name, @"PR\.\d+", "").Trim();
@@ -50,6 +55,28 @@ public class OriginCardData
         Range = CardDataCoverter.StrToCardEffectRange(data.range);
         SetRaces(data._class);
 
+        if(data.ability.StartsWith("《代替レース》")){
+            var temp = data.ability.Split("\n")[0];
+            temp = temp.Replace("《代替レース》", "");
+            var races = temp.Split("　");
+            var result = new List<CardRace>();
+            foreach(var race in races){
+                int amount = 1;
+                string r = "";
+                if(race.Contains("×３")){
+                    amount = 3;
+                    r = race.Replace("×３", "");
+                }else if(race.Contains("×２")){
+                    amount = 2;
+                    r = race.Replace("×２", "");
+                }
+                for(int i = 0;i < amount;i++){
+                    result.Add(CardDataCoverter.StrToCardRace(r)[0]);
+                }
+            }
+            data.ability = data.ability.Replace(temp + "\\n", "");
+        }
+
         data.text = data.skill.Replace("Union", "").Trim();
         if(data.upkeep != ""){
             data.text += " 維持コスト：" + data.upkeep;
@@ -57,7 +84,7 @@ public class OriginCardData
         data.text += "\n";
 
         if(data.ability.Contains("（人気爆発）")){
-            string[] texts = data.ability.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] texts = data.ability.Split(new string[] { "\\n" }, StringSplitOptions.RemoveEmptyEntries);
 
             for (int i = 0; i < texts.Length; i++)
             {

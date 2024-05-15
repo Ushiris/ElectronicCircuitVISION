@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Ruler
+public class Ruler : MonoBehaviour
 {
-    public List<UnityEvent<CardData>> AutoAlpha = new();
+    //[SerializeField] YourHand
 }
