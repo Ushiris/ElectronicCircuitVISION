@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ゲームのUI、カードの移動などグラフィックに強く影響を与える操作を行うクラス。
+/// </summary>
 public class GameBoard : MonoBehaviour
 {
     public static GameBoard Instance;

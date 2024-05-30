@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// カードの詳細画面にデータをセットするためのクラス。
+/// </summary>
 public class CardDataView : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] TMP_Text id, node, nameText, text, range, reverse, state;
@@ -27,7 +30,6 @@ public class CardDataView : MonoBehaviour, IPointerClickHandler
 
     public void SetData(CardData newCard){
         Clear();
-        Debug.Log("set data");
         var EffectedCard = newCard.EffectedCard;
         id.text = newCard.CardId + " " + CardDataConverter.CardPlayTypeToViewName(EffectedCard.PlayType);
 

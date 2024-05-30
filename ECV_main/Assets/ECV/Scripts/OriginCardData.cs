@@ -6,6 +6,9 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 
 
+/// <summary>
+/// 「本来のカード」の記述を保持するクラス。書き換えは基本的にできない様にしている。
+/// </summary>
 public class OriginCardData
 {
     public string Id { get => Prefix + Number.ToString();}

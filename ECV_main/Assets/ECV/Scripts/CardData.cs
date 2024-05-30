@@ -6,6 +6,9 @@ using Unity.Mathematics;
 using System.Net.NetworkInformation;
 using UnityEngine;
 
+/// <summary>
+/// 効果を適用した後のカードデータ。
+/// </summary>
 public class EffectedCardData{
     public string Id { get => Prefix + Number.ToString();}
     public string Prefix{ get; set; } = "T";
@@ -59,6 +62,9 @@ public class EffectedCardData{
     }
 }
 
+/// <summary>
+/// 本来の記述とカードの効果、かかっている効果やセットされたカードなどの、1つのカードに関わるデータすべてを記録するクラス。
+/// </summary>
 public class CardData
 {
     //本来の記述
@@ -70,6 +76,9 @@ public class CardData
     //呪符
     public List<CardData> enchantments = new();
 
+    //その他セットされたカード
+    public List<CardData> otherSetCards = new();
+
     //付与された効果
     public List<CardEffect> effects = new();
 
@@ -78,7 +87,7 @@ public class CardData
             EffectedCardData card = new(origin);
 
             foreach(var effect in effects){
-                card = effect.Effect(card);
+                card = effect.Effect(card, false);
             }
 
             return card;

@@ -204,6 +204,9 @@ public static class CardDataConverter
 
 }
 
+/// <summary>
+/// カードリストのデータを保持するクラス。
+/// </summary>
 public class CardDataList
 {
     static CardDataList instance;
