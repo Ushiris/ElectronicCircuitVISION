@@ -50,9 +50,9 @@ public class OriginCardData
         Comment = data.text;
         User = data.user;
 
-        PlayType = CardDataCoverter.StrToCardPlayType(data.type);
-        Duration = CardDataCoverter.StrToCardEffectDuration(data.time);
-        Range = CardDataCoverter.StrToCardEffectRange(data.range);
+        PlayType = CardDataConverter.StrToCardPlayType(data.type);
+        Duration = CardDataConverter.StrToCardEffectDuration(data.time);
+        Range = CardDataConverter.StrToCardEffectRange(data.range);
         SetRaces(data._class);
 
         if(data.ability.StartsWith("《代替レース》")){
@@ -71,39 +71,58 @@ public class OriginCardData
                     r = race.Replace("×２", "");
                 }
                 for(int i = 0;i < amount;i++){
-                    result.Add(CardDataCoverter.StrToCardRace(r)[0]);
+                    result.Add(CardDataConverter.StrToCardRace(r)[0]);
                 }
             }
-            data.ability = data.ability.Replace(temp + "\\n", "");
+            data.ability = data.ability.Replace(temp + "\n", "");
         }
 
-        data.text = data.skill.Replace("Union", "").Trim();
+        Text = data.skill.Replace("Union", "").Trim();
         if(data.upkeep != ""){
-            data.text += " 維持コスト：" + data.upkeep;
+            Text+= " 維持コスト：" + data.upkeep;
         }
-        data.text += "\n";
+        Text += "\n";
 
         if(data.ability.Contains("（人気爆発）")){
-            string[] texts = data.ability.Split(new string[] { "\\n" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] texts = data.ability.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
             for (int i = 0; i < texts.Length; i++)
             {
-                if (texts[i].Contains("人気：４"))
+                if (texts[i].Contains("人気：４")){
                     Popularity4 += texts[i + 1];
-                else if (texts[i].Contains("人気２～４"))
+                    i++;
+                }
+                else if (texts[i].Contains("人気２～４")){
                     Popularity2 += texts[i + 1];
-                else if (texts[i].Contains("人気：０"))
+                    i++;
+                }
+                else if (texts[i].Contains("人気：０")){
                     Popularity0 += texts[i + 1];
-                else if (texts[i].Contains("人気：１～４"))
+                    i++;
+                }
+                else if (texts[i].Contains("人気：１～４")){
                     Popularity1 += texts[i + 1];
-                else if(!texts[i-1].Contains("人気：４")&&!texts[i-1].Contains("人気２～４")&&!texts[i-1].Contains("人気：０")&&!texts[i-1].Contains("人気：１～４"))
-                    data.text += texts[i];
+                    i++;
+                }
+                else{
+                    Text += texts[i];
+                }
             }
         }
         else
         {
-            data.text += data.ability;
+            Text += data.ability;
         }
+        Text = Text.Trim();
+        Text = Text.Replace("①", "（１）")
+        .Replace("②", "（２）")
+        .Replace("③", "（３）")
+        .Replace("④", "（４）")
+        .Replace("⑤", "（５）")
+        .Replace("⑥", "（６）")
+        .Replace("⑦", "（７）")
+        .Replace("⑧", "（８）")
+        .Replace("⑨", "（９）");
     }
 
     public bool HasRace(CardRace race){
@@ -116,7 +135,7 @@ public class OriginCardData
 
     public List<CardRace> GetCardRaces(){
         if(race1 == CardRace.None){
-            return new List<CardRace>();
+            return new List<CardRace>(){CardRace.None};
         }
 
         if(race2 == CardRace.None){
@@ -127,7 +146,7 @@ public class OriginCardData
     }
 
     public void SetRaces(string races){
-        var temp = CardDataCoverter.StrToCardRace(races);
+        var temp = CardDataConverter.StrToCardRace(races);
 
         if (temp.Count == 0){
             race1 = CardRace.None;

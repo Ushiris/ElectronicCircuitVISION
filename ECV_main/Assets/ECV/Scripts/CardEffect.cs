@@ -14,11 +14,14 @@ public class CardEffect
 {
     public CardData Source{ get; private set; }
     public CardEffectType Type { get; private set; }
-    public Func<TempCardData, TempCardData> Effect{ get; private set; }
+    public Func<EffectedCardData, EffectedCardData> Effect{ get; private set; }
 
-    public CardEffect(CardData card, CardEffectType effectType, Func<TempCardData, TempCardData> effect){
+    public string Text { get; private set; }
+
+    public CardEffect(CardData card, CardEffectType effectType, Func<EffectedCardData, EffectedCardData> effect, string text){
         Source = card;
         Type = effectType;
         Effect = effect;
+        Text = text;
     }
 }

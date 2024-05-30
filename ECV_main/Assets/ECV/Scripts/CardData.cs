@@ -6,13 +6,13 @@ using Unity.Mathematics;
 using System.Net.NetworkInformation;
 using UnityEngine;
 
-public class TempCardData{
+public class EffectedCardData{
     public string Id { get => Prefix + Number.ToString();}
     public string Prefix{ get; set; } = "T";
     public string Name{ get; set; } = "";
     public int Number { get; set; } = 0;
-    public string Node { get; set; } = "-";
-    public string Cost { get; set; } = "-";
+    public string Node { get; set; } = "";
+    public string Cost { get; set; } = "";
     public string Attack { get; set; } = "";
     public string Toughness { get; set; } = "";
     public string Graze { get; set; } = "";
@@ -28,18 +28,14 @@ public class TempCardData{
     public CardPlayType PlayType { get; set; } = CardPlayType.None;
     public CardEffectDuration Duration = CardEffectDuration.None;
     public CardEffectRange Range = CardEffectRange.None;
-    CardRace race1 = CardRace.None;
-    CardRace race2 = CardRace.None;
+
+    public List<CardRace> races = new();
 
     public bool HasRace(CardRace race){
-        if(race == CardRace.None){
-            return race1 == race;
-        }
-
-        return race1 == race || race2 == race;
+        return races.Contains(race);
     }
 
-    public TempCardData(OriginCardData card){
+    public EffectedCardData(OriginCardData card){
         Prefix = card.Prefix;
         Name = card.Name;
         Number = card.Number;
@@ -59,6 +55,7 @@ public class TempCardData{
         PlayType = card.PlayType;
         Duration = card.Duration;
         Range = card.Range;
+        races = card.GetCardRaces();
     }
 }
 
@@ -68,26 +65,64 @@ public class CardData
     public OriginCardData origin;
 
     //装備
-    public CardData equipment;
+    public CardData equipment = null;
 
     //呪符
-    public List<CardData> enchantments;
+    public List<CardData> enchantments = new();
 
     //付与された効果
-    public List<CardEffect> effects;
+    public List<CardEffect> effects = new();
 
-    public string GetName(){
-        TempCardData card = new(origin);
+    public EffectedCardData EffectedCard{
+        get {
+            EffectedCardData card = new(origin);
 
-        foreach(var effect in effects){
-            card = effect.Effect(card);
+            foreach(var effect in effects){
+                card = effect.Effect(card);
+            }
+
+            return card;
         }
-
-        return card.Name;
     }
 
-    public int GetNode(){
-        return 0;
+    int Vstr2Int(string vText, int NaN){
+        if(vText == "X" || vText == "-" || vText == ""){
+            return NaN;
+        }
+
+        return int.Parse(vText);
+    }
+
+    public int GetNodeNumber(int NaN = 0){
+        return Vstr2Int(EffectedCard.Node, NaN);
+    }
+
+    public int GetCostNumber(int NaN = 0){
+        return Vstr2Int(EffectedCard.Cost, NaN);
+    }
+
+    public int GetGrazeNumber(int NaN = 0){
+        return Vstr2Int(EffectedCard.Graze, NaN);
+    }
+
+    public int GetAttackNumber(int NaN = 0){
+        return Vstr2Int(EffectedCard.Attack, NaN);
+    }
+
+    public int GetToughnessNumber(int NaN = 0){
+        return Vstr2Int(EffectedCard.Toughness, NaN);
+    }
+
+    public string Name {
+        get {
+            return EffectedCard.Name;
+        }
+    }
+
+    public string Text{
+        get {
+            return EffectedCard.Text;
+        }
     }
 
     public string CardId { get => origin.Id;}

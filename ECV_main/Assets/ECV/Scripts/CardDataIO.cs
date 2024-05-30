@@ -47,7 +47,7 @@ public enum CardRace
     Enma, God, Beast, Ogre, CelestialMaiden, Dragon, Hsien, Dwarf, None
 }
 
-public static class CardDataCoverter
+public static class CardDataConverter
 {
     public static string CardPlayTypeToViewName(CardPlayType type)
     {
@@ -113,6 +113,15 @@ public static class CardDataCoverter
             CardRace.None => "なし",
             _ => "Error!"
         };
+    }
+
+    public static string CardRacesToViewName(List<CardRace> cardRaces){
+        var r = "";
+        foreach(var race in cardRaces){
+            r += " " + CardRaceToViewName(race);
+        }
+
+        return r;
     }
 
     public static CardPlayType StrToCardPlayType(string str)
@@ -224,7 +233,7 @@ public class CardDataList
         _ = Instance;
 
         // JSONファイルの読み込み
-        string jsonString = File.ReadAllText(Resources.Load<TextAsset>("CardData.json").text);
+        string jsonString = Resources.Load<TextAsset>("CardList").text;
 
         // JSONデータをデシリアライズしてDictionaryに格納
         instance.CardList = JsonConvert.DeserializeObject<Dictionary<string, RawCardData>>(jsonString);
