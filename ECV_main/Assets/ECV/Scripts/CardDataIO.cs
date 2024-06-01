@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
+using System.Text;
 using UnityEngine;
 
 [System.Serializable]
@@ -239,6 +239,6 @@ public class CardDataList
         string jsonString = Resources.Load<TextAsset>("CardList").text;
 
         // JSONデータをデシリアライズしてDictionaryに格納
-        instance.CardList = JsonConvert.DeserializeObject<Dictionary<string, RawCardData>>(jsonString);
+        instance.CardList = JsonUtility.FromJson<Dictionary<string, RawCardData>>(jsonString);
     }
 }
